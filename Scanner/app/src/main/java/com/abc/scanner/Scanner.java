@@ -23,6 +23,11 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
 
+    /**
+     * Instanciates the scanner
+     * @param savedInstanceState resumes the scanner state
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +43,29 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         }
     }
 
+    /**
+     *
+     * @return The permissions of the app
+     */
+
     private boolean checkPermission() {
         return (ContextCompat.checkSelfPermission(Scanner.this, CAMERA) == PackageManager.PERMISSION_GRANTED);
     }
 
+    /**
+     * Method to request permissions for the app
+     */
+
     private void requestPermission() {
         ActivityCompat.requestPermissions(this, new String[]{CAMERA}, REQUEST_CAMERA);
     }
+
+    /**
+     * Method to start the scanner
+     * @param requestCode Takes in requests
+     * @param permission Takes in the permissions
+     * @param grantResults Tskes in the grant results
+     */
 
     public void onRequestPermissionResult(int requestCode, String permission[], int grantResults[]) {
         switch (requestCode) {
@@ -82,6 +103,10 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         }
     }
 
+    /**
+     * Method to stop the app asking permission on every startup of the app
+     */
+
     @Override
     public void onResume() {
         super.onResume();
@@ -102,11 +127,21 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         }
     }
 
+    /**
+     * Method to stop the camera when the app is closed
+     */
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         scannerView.stopCamera();
     }
+
+    /**
+     * Method to display app Message Alerts to  the user
+     * @param message type of the message
+     * @param listener the actual message
+     */
 
     public void displayAlertMessage(String message, DialogInterface.OnClickListener listener) {
 
@@ -117,6 +152,11 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
                 .create()
                 .show();
     }
+
+    /**
+     * Method to handle the actions of the user
+     * @param result passes in the result to be decided upon
+     */
 
     @Override
     public void handleResult(Result result) {

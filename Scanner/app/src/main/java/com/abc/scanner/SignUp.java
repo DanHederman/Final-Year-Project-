@@ -1,22 +1,21 @@
 package com.abc.scanner;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-
-import java.net.URL;
+import android.widget.Toast;
 
 public class SignUp extends AppCompatActivity {
 
-    EditText full_name, email, password, passwordconfo;
+    EditText First_Name, Last_Name, email, password, passwordconfo;
 
-    String FullName, Password, PasswordConfo, Email;
+    DBHelper myDB;
 
-    Context ctx = this;
+    Button signUpBut;
+
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -24,41 +23,47 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        full_name = (EditText) findViewById(R.id.fullname);
-        password = (EditText) findViewById(R.id.pwd);
-        passwordconfo = (EditText) findViewById(R.id.pwdconfo);
-        email = (EditText) findViewById(R.id.email);
+        myDB = new DBHelper(this);
+
+        First_Name = findViewById(R.id.editFirstName);
+        Last_Name = findViewById(R.id.editLastName);
+        password = findViewById(R.id.editPassword);
+        passwordconfo = findViewById(R.id.editConfirmPassword);
+        email = findViewById(R.id.editEmail);
+
+        signUpBut = findViewById(R.id.signUpBut);
+
+        AddDataToDB();
     }
 
-    public void register(View V){
+    /**
+     * Method to add data to the database(also error checks password before sign up)
+     */
 
-        FullName = full_name.getText().toString();
-        Password = password.getText().toString();
-        PasswordConfo = passwordconfo.getText().toString();
-        Email = email.getText().toString();
+    public void AddDataToDB(){
 
+        signUpBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                if(password.getText().toString().equals(passwordconfo.getText().toString()))
+                {
+                    try{
 
-        BackGround b = new BackGround();
+                        myDB.insertData(First_Name.getText().toString(),Last_Name.getText().toString(), email.getText().toString(), password.getText().toString());
 
-    }
+                        Toast.makeText(SignUp.this,"Data inserted successfully",Toast.LENGTH_LONG).show();
+                    }
+                    catch (IllegalArgumentException e){
 
-    class BackGround extends AsyncTask<String, String, String>{
+                        Toast.makeText(SignUp.this, "Error: Data not successfully inserted", Toast.LENGTH_LONG).show();
+                    }
+                }
+                else{
+                    Toast.makeText(SignUp.this, "Error: Passwords do not match", Toast.LENGTH_LONG).show();
 
-        @Override
-        protected String doInBackground(String... params) {
-
-            String full_name = params[0];
-            String email = params[2];
-            String password = params[1];
-            String data ="";
-            int tmp;
-
-            try{
-                URL url = new URL()
+                }
             }
-
-            return null;
-        }
+        });
     }
 }
